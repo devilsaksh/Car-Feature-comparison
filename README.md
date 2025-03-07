@@ -15,22 +15,22 @@ Fast and Asynchronous: Uses httpx for async API requests.
 Installation
 Prerequisites
 
-Python 3.8+
-FastAPI
-Uvicorn
-httpx
-Jinja2
-pydantic
+- Python 3.8+
+- FastAPI
+- Uvicorn
+- httpx
+- Jinja2
+- pydantic
 
 Install the above libraries.
 
 --To run the project 
 
-step 1: Clone the repro
-step 2: Install dependicied
-step 3: run command in terminal - python main.py
-step 4: Go to browser and enter url - localhost:8001
-step 5: Enter the parameters and results will appear
+- step 1: Clone the repro
+- step 2: Install dependicied
+- step 3: run command in terminal - python main.py
+- step 4: Go to browser and enter url - localhost:8001
+- step 5: Enter the parameters and results will appear
 
 
 Thanku
