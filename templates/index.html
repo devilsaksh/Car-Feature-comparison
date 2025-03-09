@@ -1,254 +1,141 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vehicle Comparison Tool</title>
     <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}" />
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1><i class="fas fa-car"></i> Vehicle Comparison Tool</h1>
-        <p>
-          Compare vehicle features and specifications to find the best fit for
-          you
-        </p>
-      </header>
+</head>
+<body>
 
-      <div class="form-container">
-        <form id="compareForm">
-          <div class="form-group">
-            <label for="vehicle1">First Vehicle:</label>
-            <i class="fas fa-car form-icon"></i>
-            <input
-              type="text"
-              id="vehicle1"
-              name="vehicle1"
-              required
-              placeholder="e.g., Toyota Corolla"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="vehicle2">Second Vehicle:</label>
-            <i class="fas fa-car-side form-icon"></i>
-            <input
-              type="text"
-              id="vehicle2"
-              name="vehicle2"
-              required
-              placeholder="e.g., Honda Civic"
-            />
-          </div>
-
-          <div class="form-group checkbox">
-            <input
-              type="checkbox"
-              id="include_features"
-              name="include_features"
-              checked
-            />
-            <label for="include_features">Include Detailed Features</label>
-          </div>
-
-          <div class="form-group">
-            <label for="tone">Comparison Tone:</label>
-            <i class="fas fa-comment-alt form-icon"></i>
-            <select id="tone" name="tone">
-              <option value="informative" selected>Informative</option>
-              <option value="casual">Casual</option>
-              <option value="detailed">Detailed</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="model">LLM Model:</label>
-            <i class="fas fa-robot form-icon"></i>
-            <select id="model" name="model">
-              <!-- Will be populated from API -->
-              <option value="gemma2:2b" selected>gemma2:2b</option>
-              <option value="gpt-4-turbo">GPT-4 Turbo</option>
-              <option value="mistral-7b">Mistral 7B</option>
-              <option value="claude-3-sonnet">Claude 3 Sonnet</option>
-            </select>
-          </div>
-
-          <button type="submit" id="compareBtn">
-            <i class="fas fa-exchange-alt"></i> Compare Vehicles
-          </button>
-        </form>
-      </div>
-
-      <div
-        class="results-container"
-        id="resultsContainer"
-        style="display: none"
-      >
-        <h2><i class="fas fa-chart-bar"></i> Comparison Results</h2>
-        <div id="loading" style="display: none">
-          <div class="spinner"></div>
-          <p>Generating comparison...</p>
+    <!-- ✅ New Header Design -->
+    <header>
+        <div class="logo-container">
+            <img src="{{ url_for('static', path='/images/IVIS_logo.png') }}" alt="IVIS Logo" class="logo" />
+            <h1><i class="fas fa-car"></i> Vehicle Comparison Tool </h1>
         </div>
-        <div id="results">
-          <!-- Results will appear here -->
-        </div>
-        <button id="copyBtn">
-          <i class="fas fa-copy"></i> Copy to Clipboard
-        </button>
-      </div>
-    </div>
+        
+        <img src="{{ url_for('static', path='/images/nie logo.png') }}" alt="NIE Logo" class="logo" />
+    </header>
 
-    <footer>
-      <p>© 2025 Vehicle Comparison Tool | All Rights Reserved</p>
-      <p>Helping you make better vehicle choices</p>
-      <div class="social-icons">
-        <a href="#"><i class="fab fa-facebook"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-linkedin"></i></a>
-      </div>
-    </footer>
+    <!-- ✅ New Horizontal Layout Wrapper -->
+    <main class="comparison-wrapper">
+
+        <!-- 🚀 Left Panel: Input Form -->
+        <section class="form-panel">
+            <h2>Enter Vehicle Details</h2>
+            <form id="compareForm">
+                <div class="form-group">
+                    <label for="vehicle1">First Vehicle:</label>
+                    <input type="text" id="vehicle1" name="vehicle1" required placeholder="e.g., Toyota Corolla" />
+                </div>
+
+                <div class="form-group">
+                    <label for="vehicle2">Second Vehicle:</label>
+                    <input type="text" id="vehicle2" name="vehicle2" required placeholder="e.g., Honda Civic" />
+                </div>
+
+                <div class="form-group checkbox">
+                    <input type="checkbox" id="include_features" name="include_features" checked />
+                    <label for="include_features">Include Detailed Features</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="tone">Comparison Tone:</label>
+                    <select id="tone" name="tone">
+                        <option value="informative" selected>Informative</option>
+                        <option value="casual">Casual</option>
+                        <option value="detailed">Detailed</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="compareBtn">
+                    <i class="fas fa-exchange-alt"></i> Compare Vehicles
+                </button>
+            </form>
+        </section>
+
+        <!-- 🚀 Right Panel: Comparison Results -->
+        <section class="results-panel" id="resultsContainer">
+            <h2><i class="fas fa-chart-bar"></i> Comparison Results</h2>
+            <div id="loading" style="display: none">
+                <div class="spinner"></div>
+                <p>Generating comparison...</p>
+            </div>
+            <div id="results"></div>
+            <button id="copyButton" style="display: none" onclick="copyToClipboard()">Copy to Clipboard</button>
+        </section>
+
+    </main>
 
     <script>
-      document.addEventListener("DOMContentLoaded", async () => {
-        try {
-          const response = await fetch("/models");
-          const data = await response.json();
-          const modelSelect = document.getElementById("model").style.display = "Visible";;
-          
-          modelSelect.innerHTML = "";
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("compareForm");
+            const compareBtn = document.getElementById("compareBtn");
+            const resultsContainer = document.getElementById("resultsContainer");
+            const resultsDiv = document.getElementById("results");
+            const loadingDiv = document.getElementById("loading");
+            const copyButton = document.getElementById("copyButton");
 
-          data.models.forEach((model) => {
-            const option = document.createElement("option");
-            option.value = model;
-            option.textContent = model;
-            modelSelect.appendChild(option);
-          });
-        } catch (error) {
-          console.error("Error fetching models:", error);
-        }
-      });
+            form.addEventListener("submit", async function (event) {
+                event.preventDefault(); // Prevent page refresh
 
-      document
-        .getElementById("compareForm")
-        .addEventListener("submit", async (e) => {
-          e.preventDefault();
+                // Get form data
+                const formData = new FormData(form);
 
-          const formData = new FormData(e.target);
-          const resultsContainer = document.getElementById("resultsContainer");
-          const loading = document.getElementById("loading");
-          const results = document.getElementById("results");
+                // Show loading
+                resultsContainer.style.display = "block";
+                resultsDiv.innerHTML = "";
+                loadingDiv.style.display = "block";
+                compareBtn.innerHTML = "Comparing...";
+                compareBtn.disabled = true;
+                copyButton.style.display = "none"; // Hide copy button until content is ready
 
-          resultsContainer.style.display = "block";
-          loading.style.display = "block";
-          results.innerHTML = "";
+                try {
+                    const response = await fetch("/compare", {
+                        method: "POST",
+                        body: formData
+                    });
 
-          try {
-            const response = await fetch("/compare", {
-              method: "POST",
-              body: formData,
+                    const data = await response.json();
+                    loadingDiv.style.display = "none";
+                    compareBtn.innerHTML = "<i class='fas fa-exchange-alt'></i> Compare Vehicles";
+                    compareBtn.disabled = false;
+
+                    if (data.success) {
+                        resultsDiv.innerHTML = data.result;
+                        resultsDiv.style.display = "block";
+                        copyButton.style.display = "block"; // Show copy button when content is ready
+                    } else {
+                        resultsDiv.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+                    }
+                } catch (error) {
+                    loadingDiv.style.display = "none";
+                    resultsDiv.innerHTML = `<p style="color:red;">Request failed.</p>`;
+                }
             });
-
-            if (!response.ok) {
-              throw new Error(`Error: ${response.statusText}`);
-            }
-
-            const data = await response.json();
-            results.innerHTML = formatComparisonResponse(
-              data.comparison_result
-            );
-          } catch (error) {
-            results.innerHTML = `<div class="error">Error: ${error.message}</div>`;
-          } finally {
-            loading.style.display = "none";
-          }
         });
 
-      document.getElementById("copyBtn").addEventListener("click", () => {
-        const results = document.getElementById("results").innerText;
-        navigator.clipboard
-          .writeText(results)
-          .then(() => {
-            const copyBtn = document.getElementById("copyBtn");
-            copyBtn.textContent = "Copied!";
-            setTimeout(() => {
-              copyBtn.textContent = "Copy to Clipboard";
-              // Restore icon after text changes back
-              const icon = document.createElement("i");
-              icon.className = "fas fa-copy";
-              copyBtn.prepend(icon, " ");
-            }, 2000);
-          })
-          .catch((err) => {
-            console.error("Failed to copy: ", err);
-          });
-      });
-
-      function formatComparisonResponse(text) {
-        let formatted = text;
-
-        // Handle table format - this is the key addition for your issue
-        // Convert markdown-style tables to HTML tables
-        const tableRegex = /\|(.*)\|\n\|[-\s|]+\|([\s\S]*?)(?=\n\n|\n$|$)/g;
-        
-        formatted = formatted.replace(tableRegex, function(match, headerRow, bodyRows) {
-          let tableHtml = '<table class="comparison-table">\n<thead>\n<tr>';
-          
-          // Process header
-          const headers = headerRow.split('|').map(h => h.trim()).filter(h => h);
-          headers.forEach(header => {
-            tableHtml += `<th>${header}</th>`;
-          });
-          
-          tableHtml += '</tr>\n</thead>\n<tbody>';
-          
-          // Process body rows
-          const rows = bodyRows.split('\n').filter(row => row.trim());
-          rows.forEach(row => {
-            const cells = row.split('|').map(c => c.trim()).filter(c => c);
-            if (cells.length > 0) {
-              tableHtml += '<tr>';
-              cells.forEach(cell => {
-                tableHtml += `<td>${cell}</td>`;
-              });
-              tableHtml += '</tr>';
+        function copyToClipboard() {
+            const resultsDiv = document.getElementById("results");
+            if (!resultsDiv || resultsDiv.innerText.trim() === "") {
+                alert("Nothing to copy! Generate a comparison first.");
+                return;
             }
-          });
-          
-          tableHtml += '</tbody>\n</table>';
-          return tableHtml;
-        });
-        
-        // Continue with other formatting
-        // Convert bold markdown (**text**) to <strong>
-        formatted = formatted.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
 
-        // Convert list items (* item) to <ul><li>item</li></ul>
-        // Improved list handling
-        formatted = formatted.replace(/(\n\* .*(\n\s+\* .*)*)+/g, function(match) {
-          const listItems = match.split('\n* ').filter(item => item.trim());
-          let listHtml = '<ul>';
-          listItems.forEach(item => {
-            if (item.trim()) {
-              listHtml += `<li>${item.trim()}</li>`;
-            }
-          });
-          listHtml += '</ul>';
-          return listHtml;
-        });
-
-        // Convert section titles (**Title:**) to <h3>
-        formatted = formatted.replace(/\*\*(.*?)\:\*\*/g, "<h3>$1</h3>");
-
-        // Convert line breaks to <br> for better readability
-        formatted = formatted.replace(/\n/g, "<br>");
-
-        return formatted;
-      }
+            navigator.clipboard.writeText(resultsDiv.innerText).then(function () {
+                alert("Comparison copied to clipboard!");
+            }).catch(function (err) {
+                console.error("Failed to copy:", err);
+                alert("Failed to copy text. Please try manually.");
+            });
+        }
     </script>
-  </body>
+
+    <footer>
+        <p>© 2025 Vehicle Comparison Tool | All Rights Reserved</p>
+        <p>Helping you make better vehicle choices</p>
+    </footer>
+</body>
 </html>
