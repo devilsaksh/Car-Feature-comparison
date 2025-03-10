@@ -16,7 +16,7 @@ templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Configuration for Google's Gemini API
-GEMINI_API_KEY = "AIzaSyAAS3IoXNca_Fr1Du2Wd_KefI3w4q9Pfgo"  # Replace with your actual API key
+GEMINI_API_KEY = "Enter your Api key(Gemini)"  # Replace with your actual API key
 genai.configure(api_key=GEMINI_API_KEY)
 DEFAULT_MODEL = "gemini-2.0-flash"
 
