@@ -1,141 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vehicle Comparison Tool</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarCompare Pro - Professional Vehicle Comparison Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
-
-    <!-- ✅ New Header Design -->
-    <header>
-        <div class="logo-container">
-            <img src="{{ url_for('static', path='/images/IVIS_logo.png') }}" alt="IVIS Logo" class="logo" />
-            <h1><i class="fas fa-car"></i> Vehicle Comparison Tool </h1>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <h1><i class="fas fa-car-side"></i> CarCompare Pro</h1>
+            <p>Professional Vehicle Comparison & Analysis Platform</p>
         </div>
-        
-        <img src="{{ url_for('static', path='/images/nie logo.png') }}" alt="NIE Logo" class="logo" />
     </header>
 
-    <!-- ✅ New Horizontal Layout Wrapper -->
-    <main class="comparison-wrapper">
-
-        <!-- 🚀 Left Panel: Input Form -->
-        <section class="form-panel">
-            <h2>Enter Vehicle Details</h2>
-            <form id="compareForm">
-                <div class="form-group">
-                    <label for="vehicle1">First Vehicle:</label>
-                    <input type="text" id="vehicle1" name="vehicle1" required placeholder="e.g., Toyota Corolla" />
-                </div>
-
-                <div class="form-group">
-                    <label for="vehicle2">Second Vehicle:</label>
-                    <input type="text" id="vehicle2" name="vehicle2" required placeholder="e.g., Honda Civic" />
-                </div>
-
-                <div class="form-group checkbox">
-                    <input type="checkbox" id="include_features" name="include_features" checked />
-                    <label for="include_features">Include Detailed Features</label>
-                </div>
-
-                <div class="form-group">
-                    <label for="tone">Comparison Tone:</label>
-                    <select id="tone" name="tone">
-                        <option value="informative" selected>Informative</option>
-                        <option value="casual">Casual</option>
-                        <option value="detailed">Detailed</option>
-                    </select>
-                </div>
-
-                <button type="submit" id="compareBtn">
-                    <i class="fas fa-exchange-alt"></i> Compare Vehicles
-                </button>
-            </form>
-        </section>
-
-        <!-- 🚀 Right Panel: Comparison Results -->
-        <section class="results-panel" id="resultsContainer">
-            <h2><i class="fas fa-chart-bar"></i> Comparison Results</h2>
-            <div id="loading" style="display: none">
-                <div class="spinner"></div>
-                <p>Generating comparison...</p>
+    <!-- Features Section -->
+    <section class="main-container">
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Detailed Analysis</h3>
+                <p>Get comprehensive comparisons with performance metrics, pricing, and feature breakdowns</p>
             </div>
-            <div id="results"></div>
-            <button id="copyButton" style="display: none" onclick="copyToClipboard()">Copy to Clipboard</button>
-        </section>
+            <div class="feature-card">
+                <i class="fas fa-clock"></i>
+                <h3>Real-Time Data</h3>
+                <p>Access up-to-date vehicle information and market pricing for accurate comparisons</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-users"></i>
+                <h3>Expert Insights</h3>
+                <p>Professional analysis tailored to your specific needs and preferences</p>
+            </div>
+        </div>
 
-    </main>
+        <!-- Main Comparison Tool -->
+        <div class="comparison-layout">
+            <!-- Left Panel: Input Form -->
+            <section class="form-panel">
+                <h2><i class="fas fa-edit"></i> Vehicle Details</h2>
+                <form id="compareForm">
+                    <div class="form-group">
+                        <label for="vehicle1">First Vehicle</label>
+                        <div class="input-icon">
+                            <i class="fas fa-car"></i>
+                            <input type="text" id="vehicle1" name="vehicle1" required 
+                                   placeholder="e.g., 2024 Tesla Model 3" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="vehicle2">Second Vehicle</label>
+                        <div class="input-icon">
+                            <i class="fas fa-car"></i>
+                            <input type="text" id="vehicle2" name="vehicle2" required 
+                                   placeholder="e.g., 2024 BMW i4" />
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="include_features" name="include_features" checked />
+                        <label for="include_features">Include detailed features & specifications</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="analysis_style">Analysis Style</label>
+                        <select id="analysis_style" name="analysis_style">
+                            <option value="Professional Analysis" selected>Professional Analysis</option>
+                            <option value="Consumer-Friendly">Consumer-Friendly</option>
+                            <option value="Technical Deep-Dive">Technical Deep-Dive</option>
+                            <option value="Buying Guide Format">Buying Guide Format</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comparison_focus">Comparison Focus</label>
+                        <select id="comparison_focus" name="comparison_focus">
+                            <option value="Overall Comparison" selected>Overall Comparison</option>
+                            <option value="Performance & Handling">Performance & Handling</option>
+                            <option value="Fuel Economy & Cost">Fuel Economy & Cost</option>
+                            <option value="Safety & Reliability">Safety & Reliability</option>
+                            <option value="Comfort & Luxury">Comfort & Luxury</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="compare-btn" id="compareBtn">
+                        <i class="fas fa-balance-scale"></i>
+                        <span>Generate Comparison</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right Panel: Results -->
+            <section class="results-panel">
+                <h2><i class="fas fa-chart-bar"></i> Comparison Results</h2>
+                
+                <div id="emptyState" class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <h3>Ready to Compare</h3>
+                    <p>Enter two vehicles in the form to get started with your professional comparison analysis.</p>
+                </div>
+
+                <div id="loading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Analyzing vehicles and generating comprehensive comparison...</p>
+                </div>
+
+                <div id="results" class="results-content" style="display: none;"></div>
+                
+                <button id="copyButton" class="copy-btn" style="display: none;">
+                    <i class="fas fa-copy"></i>
+                    Copy Analysis
+                </button>
+
+                <button id="exportButton" class="copy-btn" style="display: none; margin-left: 1rem;">
+                    <i class="fas fa-download"></i>
+                    Export PDF
+                </button>
+            </section>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 CarCompare Pro | Professional Vehicle Analysis Platform</p>
+        <p>Making informed vehicle decisions easier for consumers and professionals</p>
+    </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.getElementById("compareForm");
             const compareBtn = document.getElementById("compareBtn");
-            const resultsContainer = document.getElementById("resultsContainer");
             const resultsDiv = document.getElementById("results");
             const loadingDiv = document.getElementById("loading");
+            const emptyState = document.getElementById("emptyState");
             const copyButton = document.getElementById("copyButton");
+            const exportButton = document.getElementById("exportButton");
+
+            const vehicle1Input = document.getElementById("vehicle1");
+            const vehicle2Input = document.getElementById("vehicle2");
+
+            function validateForm() {
+                const vehicle1 = vehicle1Input.value.trim();
+                const vehicle2 = vehicle2Input.value.trim();
+                
+                if (vehicle1.length < 3 || vehicle2.length < 3) {
+                    return false;
+                }
+                
+                if (vehicle1.toLowerCase() === vehicle2.toLowerCase()) {
+                    showStatus("Please enter two different vehicles for comparison.", "error");
+                    return false;
+                }
+                
+                return true;
+            }
+
+            function showStatus(message, type) {
+                const existingStatus = document.querySelector('.status-message');
+                if (existingStatus) existingStatus.remove();
+
+                const statusDiv = document.createElement('div');
+                statusDiv.className = `status-message status-${type}`;
+                statusDiv.innerHTML = `<i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i> ${message}`;
+                
+                form.insertBefore(statusDiv, form.firstChild);
+
+                setTimeout(() => {
+                    if (statusDiv.parentNode) {
+                        statusDiv.remove();
+                    }
+                }, 5000);
+            }
 
             form.addEventListener("submit", async function (event) {
-                event.preventDefault(); // Prevent page refresh
+                event.preventDefault();
+                if (!validateForm()) return;
 
-                // Get form data
                 const formData = new FormData(form);
-
-                // Show loading
-                resultsContainer.style.display = "block";
-                resultsDiv.innerHTML = "";
-                loadingDiv.style.display = "block";
-                compareBtn.innerHTML = "Comparing...";
+                
+                emptyState.style.display = "none";
+                resultsDiv.style.display = "none";
+                loadingDiv.style.display = "flex";
+                copyButton.style.display = "none";
+                exportButton.style.display = "none";
+                
+                const originalContent = compareBtn.innerHTML;
+                compareBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Analyzing...</span>';
                 compareBtn.disabled = true;
-                copyButton.style.display = "none"; // Hide copy button until content is ready
 
                 try {
                     const response = await fetch("/compare", {
                         method: "POST",
                         body: formData
                     });
-
                     const data = await response.json();
+                    
                     loadingDiv.style.display = "none";
-                    compareBtn.innerHTML = "<i class='fas fa-exchange-alt'></i> Compare Vehicles";
+                    compareBtn.innerHTML = originalContent;
                     compareBtn.disabled = false;
 
                     if (data.success) {
                         resultsDiv.innerHTML = data.result;
                         resultsDiv.style.display = "block";
-                        copyButton.style.display = "block"; // Show copy button when content is ready
+                        resultsDiv.classList.add("fade-in");
+                        copyButton.style.display = "inline-flex";
+                        exportButton.style.display = "inline-flex";
+                        showStatus("Comparison generated successfully!", "success");
                     } else {
-                        resultsDiv.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+                        showStatus(`Error: ${data.error}`, "error");
+                        emptyState.style.display = "block";
                     }
                 } catch (error) {
                     loadingDiv.style.display = "none";
-                    resultsDiv.innerHTML = `<p style="color:red;">Request failed.</p>`;
+                    compareBtn.innerHTML = originalContent;
+                    compareBtn.disabled = false;
+                    showStatus("Request failed. Please try again.", "error");
+                    emptyState.style.display = "block";
                 }
+            });
+
+            // Copy functionality
+            copyButton.addEventListener("click", function() {
+                const resultsText = resultsDiv.innerText;
+                if (!resultsText.trim()) {
+                    showStatus("Nothing to copy! Generate a comparison first.", "error");
+                    return;
+                }
+
+                navigator.clipboard.writeText(resultsText).then(function () {
+                    showStatus("Comparison copied to clipboard!", "success");
+                    copyButton.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyButton.innerHTML = '<i class="fas fa-copy"></i> Copy Analysis';
+                    }, 2000);
+                }).catch(function (err) {
+                    console.error("Failed to copy:", err);
+                    showStatus("Failed to copy text. Please try manually.", "error");
+                });
+            });
+
+            // Export functionality (to implement)
+            exportButton.addEventListener("click", function() {
+                showStatus("PDF export feature coming soon!", "success");
             });
         });
 
-        function copyToClipboard() {
-            const resultsDiv = document.getElementById("results");
-            if (!resultsDiv || resultsDiv.innerText.trim() === "") {
-                alert("Nothing to copy! Generate a comparison first.");
-                return;
+        // Export functionality
+        exportButton.addEventListener("click", async function() {
+        const resultsHTML = resultsDiv.innerHTML;
+        if (!resultsHTML.trim()) {
+            showStatus("Nothing to export! Generate a comparison first.", "error");
+            return;
+        }
+
+        try {
+            // Send the content to backend
+            const response = await fetch("/export-pdf", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ content: resultsHTML })
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to generate PDF");
             }
 
-            navigator.clipboard.writeText(resultsDiv.innerText).then(function () {
-                alert("Comparison copied to clipboard!");
-            }).catch(function (err) {
-                console.error("Failed to copy:", err);
-                alert("Failed to copy text. Please try manually.");
-            });
-        }
-    </script>
+            // Convert response into a Blob
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
 
-    <footer>
-        <p>© 2025 Vehicle Comparison Tool | All Rights Reserved</p>
-        <p>Helping you make better vehicle choices</p>
-    </footer>
+            // Create a download link
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "comparison.pdf";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+
+            window.URL.revokeObjectURL(url);
+            showStatus("PDF exported successfully!", "success");
+        } catch (error) {
+            console.error("PDF export error:", error);
+            showStatus("Failed to export PDF. Please try again.", "error");
+        }
+    });
+    </script>
 </body>
 </html>
